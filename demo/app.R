@@ -8,8 +8,8 @@ library(ggplot2)
 library(org.Hs.eg.db)
 library(GOstats)
 library(openxlsx)
-library(dplyr)
 library(plyr)
+library(dplyr)
 library(BiocManager)
 options(repos = BiocManager::repositories())
 
@@ -47,7 +47,7 @@ ui <-
                       sidebarLayout(
                         sidebarPanel(
                           selectizeInput("datasets", "Select a dataset:",
-                                         choices=names(input.genelist)[1:2]
+                                         choices=names(input.genelist)[1:4]
                           ), # end with selectizeInput
                           br(),
                           radioButtons("GOtype", "GO category",
