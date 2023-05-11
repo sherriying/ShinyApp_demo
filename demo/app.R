@@ -1,3 +1,4 @@
+
 # This is a Shiny web application. You can run the application at web:
 # https://sherriying.shinyapps.io/BulkRNAseq_Shiny_demo/
 
@@ -15,7 +16,7 @@ options(repos = BiocManager::repositories())
 
 load("./exprData_metaData.RData")
 
-# Define UI for application that draws a histogram
+# Define UI for application that draws barplot and boxplot
 ui <- 
   navbarPage("Bulk-RNAseq Shiny app demo",
              theme = bs_theme(version = 4,bootswatch = "flatly"),         
@@ -44,7 +45,7 @@ ui <-
   ) # finish navbarPage
 
 
-# Define server logic required to draw a histogram
+# Define server logic required to draw plots
 server <- function(input, output,session) {
   
   # update "selectsize" to the server version,The server-side selectize input uses R to process searching, and R will return the filtered data to selectize. 
@@ -117,6 +118,37 @@ server <- function(input, output,session) {
   output$boxplot<-renderPlot({
     print(ind.gene.boxplot())
   })
+  
+  ####################
+  ### download files ##
+  ###################
+  #  barplot
+  ###################
+  observe({
+    if (input$tabselected==1){
+      output$download<- downloadHandler(
+        filename = function() { paste(input$genelist, '_barplot.pdf', sep='') },
+        content = function(file) {
+          #ggsave(file,plot = ind.gene(), device = "pdf")
+          pdf(file)
+          print(ind.gene())
+          dev.off()
+        }  
+      ) # finish downloadHandler
+    } # finish barplot download script
+    ###############
+    #  boxplot
+    ###############
+    if (input$tabselected==2){
+      output$download<- downloadHandler(  
+        filename = function() { paste(input$genelist, '_boxplot.pdf', sep='') },
+        content = function(file) {
+          ggsave(file,plot = ind.gene.boxplot(), device = "pdf")
+        }
+      ) # finish downloadHandler
+    } # finish boxplot 
+  })
+  
 }
 
 # Run the application 
